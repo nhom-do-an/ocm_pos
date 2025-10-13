@@ -1,36 +1,138 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+﻿# OMNI POS System
 
-## Getting Started
+Hệ thống quản lý bán hàng (Point of Sale) được xây dựng bằng Next.js 15 và TypeScript.
 
-First, run the development server:
+## Tính năng
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### 1. Bán hàng (POS)
+- **Multi-tab orders**: Tạo và quản lý nhiều đơn hàng cùng lúc
+- Giao diện bán hàng trực quan
+- Tìm kiếm sản phẩm nhanh chóng theo tên, SKU, mã vạch
+- Lọc theo danh mục
+- Giỏ hàng với quản lý số lượng
+- Ghi chú cho từng sản phẩm và đơn hàng
+- Tính toán tự động thuế và giảm giá
+- Hỗ trợ nhiều phương thức thanh toán:
+  - Tiền mặt
+  - Thẻ
+  - Chuyển khoản
+
+### 2. Quản lý Chi nhánh & Nhân viên
+- Chọn chi nhánh bán hàng
+- Chọn nhân viên thực hiện giao dịch
+- Lọc sản phẩm theo tồn kho chi nhánh
+- Theo dõi doanh số theo chi nhánh
+
+### 3. Quản lý Khách hàng
+- Tìm kiếm khách hàng nhanh
+- Lưu trữ thông tin chi tiết
+- Điểm tích lũy
+- Thêm khách hàng mới nhanh chóng
+
+### 4. Tra cứu Tồn kho
+- Hiển thị tồn kho theo bảng chi tiết
+- Tìm kiếm theo tên, SKU, mã vạch
+- Lọc theo danh mục và chi nhánh
+- Hiển thị tồn kho từng chi nhánh
+- Tính giá trị tồn kho
+- Cảnh báo tồn kho thấp
+
+### 5. Quản lý Đơn hàng
+- Lịch sử đơn hàng đầy đủ
+- Chi tiết khách hàng, chi nhánh, nhân viên
+- Trạng thái đơn hàng
+- Phương thức thanh toán
+- Filter và search mạnh mẽ
+- Xem chi tiết từng đơn hàng
+
+## Công nghệ sử dụng
+
+- **Framework**: Next.js 15 (App Router, Turbopack)
+- **Language**: TypeScript 5
+- **Styling**: Tailwind CSS 4
+- **State Management**: Zustand
+- **Icons**: Lucide React
+- **Date Formatting**: date-fns
+
+## Cấu trúc thư mục
+
+```
+omni-pos/
+├── app/                    # Next.js App Router
+│   ├── pos/               # Trang bán hàng
+│   ├── orders/            # Quản lý đơn hàng
+│   ├── inventory/         # Tra cứu tồn kho
+│   ├── layout.tsx         # Root layout
+│   └── globals.css        # Global styles
+├── components/            # React components
+│   ├── ui/               # UI components (Button, Card, Input, Modal)
+│   ├── pos/              # POS-specific components
+│   └── layout/           # Layout components (Sidebar)
+├── store/                # Zustand stores
+│   └── pos-store.ts      # POS state management
+├── types/                # TypeScript types
+│   └── index.ts          # Type definitions
+└── lib/                  # Utility functions
+    ├── utils.ts          # Helper functions
+    └── mock-data.ts      # Mock data
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Cài đặt
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Cài đặt dependencies
+npm install
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Chạy development server
+npm run dev
 
-## Learn More
+# Build production
+npm run build
 
-To learn more about Next.js, take a look at the following resources:
+# Chạy production
+npm start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Sử dụng
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Truy cập http://localhost:3000
+2. Hệ thống sẽ tự động chuyển đến trang bán hàng `/pos`
+3. Chọn chi nhánh và nhân viên bán hàng
+4. (Tùy chọn) Chọn khách hàng
+5. Nhấp vào sản phẩm để thêm vào giỏ hàng
+6. Điều chỉnh số lượng bằng nút +/-
+7. Thêm ghi chú nếu cần
+8. Nhấn "Thanh toán" để hoàn tất đơn hàng
+9. Chọn phương thức thanh toán và xác nhận
 
-## Deploy on Vercel
+## Tính năng nổi bật
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- ✅ Multi-tab orders (nhiều đơn hàng cùng lúc)
+- ✅ Quản lý chi nhánh và nhân viên
+- ✅ Tìm kiếm khách hàng nhanh
+- ✅ Ghi chú linh hoạt
+- ✅ Responsive design
+- ✅ Real-time cart updates
+- ✅ Category filtering
+- ✅ Product search
+- ✅ Automatic tax calculation
+- ✅ Discount support
+- ✅ Order history
+- ✅ Customer information tracking
+- ✅ Inventory management
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Phát triển
+
+Dự án này sử dụng:
+- ESLint for code linting
+- TypeScript for type safety
+- Tailwind CSS for styling
+
+## License
+
+MIT
+
+---
+
+**Version**: 2.0.0  
+**© 2025 OMNI POS System**
