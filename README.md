@@ -1,83 +1,8 @@
 ﻿# OMNI POS System
 
-Hệ thống quản lý bán hàng (Point of Sale) được xây dựng bằng Next.js 15 và TypeScript.
+Hệ thống Point of Sale (POS) được xây dựng với Next.js 15, TypeScript và Tailwind CSS.
 
-## Tính năng
-
-### 1. Bán hàng (POS)
-- **Multi-tab orders**: Tạo và quản lý nhiều đơn hàng cùng lúc
-- Giao diện bán hàng trực quan
-- Tìm kiếm sản phẩm nhanh chóng theo tên, SKU, mã vạch
-- Lọc theo danh mục
-- Giỏ hàng với quản lý số lượng
-- Ghi chú cho từng sản phẩm và đơn hàng
-- Tính toán tự động thuế và giảm giá
-- Hỗ trợ nhiều phương thức thanh toán:
-  - Tiền mặt
-  - Thẻ
-  - Chuyển khoản
-
-### 2. Quản lý Chi nhánh & Nhân viên
-- Chọn chi nhánh bán hàng
-- Chọn nhân viên thực hiện giao dịch
-- Lọc sản phẩm theo tồn kho chi nhánh
-- Theo dõi doanh số theo chi nhánh
-
-### 3. Quản lý Khách hàng
-- Tìm kiếm khách hàng nhanh
-- Lưu trữ thông tin chi tiết
-- Điểm tích lũy
-- Thêm khách hàng mới nhanh chóng
-
-### 4. Tra cứu Tồn kho
-- Hiển thị tồn kho theo bảng chi tiết
-- Tìm kiếm theo tên, SKU, mã vạch
-- Lọc theo danh mục và chi nhánh
-- Hiển thị tồn kho từng chi nhánh
-- Tính giá trị tồn kho
-- Cảnh báo tồn kho thấp
-
-### 5. Quản lý Đơn hàng
-- Lịch sử đơn hàng đầy đủ
-- Chi tiết khách hàng, chi nhánh, nhân viên
-- Trạng thái đơn hàng
-- Phương thức thanh toán
-- Filter và search mạnh mẽ
-- Xem chi tiết từng đơn hàng
-
-## Công nghệ sử dụng
-
-- **Framework**: Next.js 15 (App Router, Turbopack)
-- **Language**: TypeScript 5
-- **Styling**: Tailwind CSS 4
-- **State Management**: Zustand
-- **Icons**: Lucide React
-- **Date Formatting**: date-fns
-
-## Cấu trúc thư mục
-
-```
-omni-pos/
-├── app/                    # Next.js App Router
-│   ├── pos/               # Trang bán hàng
-│   ├── orders/            # Quản lý đơn hàng
-│   ├── inventory/         # Tra cứu tồn kho
-│   ├── layout.tsx         # Root layout
-│   └── globals.css        # Global styles
-├── components/            # React components
-│   ├── ui/               # UI components (Button, Card, Input, Modal)
-│   ├── pos/              # POS-specific components
-│   └── layout/           # Layout components (Sidebar)
-├── store/                # Zustand stores
-│   └── pos-store.ts      # POS state management
-├── types/                # TypeScript types
-│   └── index.ts          # Type definitions
-└── lib/                  # Utility functions
-    ├── utils.ts          # Helper functions
-    └── mock-data.ts      # Mock data
-```
-
-## Cài đặt
+## 🚀 Bắt đầu
 
 ```bash
 # Cài đặt dependencies
@@ -86,49 +11,86 @@ npm install
 # Chạy development server
 npm run dev
 
-# Build production
-npm run build
-
-# Chạy production
-npm start
+# Mở trình duyệt
+http://localhost:3000
 ```
 
-## Sử dụng
+Hệ thống sẽ tự động redirect đến trang đăng nhập.
 
-1. Truy cập http://localhost:3000
-2. Hệ thống sẽ tự động chuyển đến trang bán hàng `/pos`
-3. Chọn chi nhánh và nhân viên bán hàng
-4. (Tùy chọn) Chọn khách hàng
-5. Nhấp vào sản phẩm để thêm vào giỏ hàng
-6. Điều chỉnh số lượng bằng nút +/-
-7. Thêm ghi chú nếu cần
-8. Nhấn "Thanh toán" để hoàn tất đơn hàng
-9. Chọn phương thức thanh toán và xác nhận
+## ✨ Tính năng
 
-## Tính năng nổi bật
+- **Bán hàng tại quầy**: Tạo và quản lý đơn hàng
+- **Multi-tab orders**: Xử lý nhiều đơn hàng cùng lúc
+- **Tìm kiếm sản phẩm**: 304 sản phẩm từ API thật
+- **Quản lý chi nhánh**: Chọn chi nhánh và nhân viên
+- **Quản lý khách hàng**: Tìm kiếm và thêm khách hàng
+- **Thanh toán**: Nhiều phương thức thanh toán
+- **Phím tắt**: F3, F4, F6, F9, F10
 
-- ✅ Multi-tab orders (nhiều đơn hàng cùng lúc)
-- ✅ Quản lý chi nhánh và nhân viên
-- ✅ Tìm kiếm khách hàng nhanh
-- ✅ Ghi chú linh hoạt
-- ✅ Responsive design
-- ✅ Real-time cart updates
-- ✅ Category filtering
-- ✅ Product search
-- ✅ Automatic tax calculation
-- ✅ Discount support
-- ✅ Order history
-- ✅ Customer information tracking
-- ✅ Inventory management
+## 🔌 API
 
-## Phát triển
+Hệ thống kết nối với OCM API qua Next.js proxy để bypass CORS:
+- **Products/Variants**: 304 sản phẩm
+- **Locations**: Chi nhánh
+- **Search**: Tìm kiếm real-time
 
-Dự án này sử dụng:
-- ESLint for code linting
-- TypeScript for type safety
-- Tailwind CSS for styling
+## 📦 Tech Stack
 
-## License
+- **Framework**: Next.js 15 (App Router, Turbopack)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS v4
+- **State**: Zustand
+- **Icons**: Lucide React
+- **API**: Axios + Next.js API Routes
+
+## 🎯 Đăng nhập
+
+### Trang đăng nhập
+- Truy cập: `http://localhost:3000/login`
+- Khi click nút đăng nhập/đăng xuất ở trang POS sẽ tự động chuyển đến trang này
+- Sau khi đăng nhập thành công, hệ thống tự động chuyển đến trang POS
+
+### Đăng nhập:
+Sử dụng số điện thoại (10 chữ số) và mật khẩu từ hệ thống OCM.
+
+**Validation:**
+- Số điện thoại: 10 chữ số, bắt đầu bằng 0
+- Mật khẩu: 8-20 ký tự, có ít nhất 1 chữ cái và 1 chữ số
+
+## 📝 Cấu trúc thư mục
+
+```
+app/
+├── api/proxy/          # API proxy routes
+├── pos/                # POS page
+├── orders/             # Orders page
+└── inventory/          # Inventory page
+
+components/
+├── auth/               # Login & Account
+├── layout/             # Sidebar
+├── pos/                # POS components
+└── ui/                 # UI components
+
+store/
+├── pos-store.ts        # POS state
+└── auth-store.ts       # Auth state
+
+lib/
+├── api/                # API services
+├── api-config.ts       # Axios config
+└── mock-data.ts        # Mock data
+```
+
+## 🛠️ Scripts
+
+```bash
+npm run dev      # Development với Turbopack
+npm run build    # Build production
+npm run start    # Start production server
+```
+
+## 📄 License
 
 MIT
 
