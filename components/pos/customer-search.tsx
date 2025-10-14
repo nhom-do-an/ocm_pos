@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Search, UserPlus, X } from 'lucide-react';
 import { usePOSStore } from '@/store/pos-store';
 import { Customer } from '@/types';
@@ -8,6 +8,9 @@ import { Customer } from '@/types';
 export const CustomerSearch: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  
   const { customers, selectedCustomerId, setCustomer, addCustomer } = usePOSStore();
   const selectedCustomer = customers.find(c => c.id === selectedCustomerId);
 
@@ -32,51 +35,87 @@ export const CustomerSearch: React.FC = () => {
       addCustomer(newCustomer);
       setCustomer(newCustomer.id);
       setIsOpen(false);
+      setSearchTerm('');
     }
   };
 
+  // F4 shortcut
+  useEffect(() => {
+    const handleGlobalKeydown = (e: KeyboardEvent) => {
+      if (e.key === 'F4') {
+        e.preventDefault();
+        inputRef.current?.focus();
+        setIsOpen(true);
+      }
+    };
+
+    document.addEventListener('keydown', handleGlobalKeydown);
+    return () => document.removeEventListener('keydown', handleGlobalKeydown);
+  }, []);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   return (
-    <div className="relative">
-      <div
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50"
-      >
-        <Search className="w-4 h-4 text-gray-400" />
+    <div className="relative" ref={dropdownRef}>
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+        <input
+          ref={inputRef}
+          type="text"
+          value={selectedCustomer ? '' : searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onFocus={() => !selectedCustomer && setIsOpen(true)}
+          placeholder={selectedCustomer ? '' : 'Tìm kiếm khách hàng'}
+          className="w-full pl-10 pr-16 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+        />
         {selectedCustomer ? (
-          <div className="flex-1">
-            <p className="font-medium text-sm">{selectedCustomer.name}</p>
-            <p className="text-xs text-gray-500">{selectedCustomer.phone}</p>
+          <div className="absolute left-10 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
+            <div>
+              <p className="text-sm font-medium text-gray-900">{selectedCustomer.name}</p>
+              <p className="text-xs text-gray-500">{selectedCustomer.phone}</p>
+            </div>
+            <button
+              onClick={() => {
+                setCustomer(undefined);
+                setSearchTerm('');
+              }}
+              className="text-gray-400 hover:text-red-600 ml-2"
+            >
+              <X className="w-4 h-4" />
+            </button>
           </div>
         ) : (
-          <span className="text-gray-500 text-sm">Chọn khách hàng...</span>
-        )}
-        {selectedCustomer && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setCustomer(undefined);
-            }}
-            className="text-gray-400 hover:text-red-600"
-          >
-            <X className="w-4 h-4" />
-          </button>
+          <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-gray-400 font-medium">
+            F4
+          </span>
         )}
       </div>
 
-      {isOpen && (
-        <div className="absolute z-50 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-80 overflow-hidden">
-          <div className="p-3 border-b">
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Tìm theo tên hoặc SĐT..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              autoFocus
-            />
-          </div>
-          
-          <div className="max-h-60 overflow-y-auto">
+      {/* Add New Customer Button */}
+      {!selectedCustomer && (
+        <button
+          onClick={handleAddNewCustomer}
+          className="w-full mt-2 flex items-center justify-center gap-2 px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+        >
+          <UserPlus className="w-4 h-4" />
+          <span>Thêm khách hàng mới</span>
+        </button>
+      )}
+
+      {/* Dropdown Results */}
+      {isOpen && !selectedCustomer && (
+        <div className="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-80 overflow-hidden">
+          <div className="max-h-80 overflow-y-auto">
             {filteredCustomers.map(customer => (
               <div
                 key={customer.id}
@@ -85,31 +124,27 @@ export const CustomerSearch: React.FC = () => {
                   setIsOpen(false);
                   setSearchTerm('');
                 }}
-                className="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100"
+                className="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-0"
               >
-                <p className="font-medium">{customer.name}</p>
-                <p className="text-sm text-gray-500">{customer.phone}</p>
-                {customer.points !== undefined && (
-                  <p className="text-xs text-blue-600">Điểm: {customer.points}</p>
-                )}
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium text-sm text-gray-900">{customer.name}</p>
+                    <p className="text-xs text-gray-500">{customer.phone}</p>
+                  </div>
+                  {customer.points !== undefined && customer.points > 0 && (
+                    <span className="text-xs text-blue-600 font-medium">
+                      {customer.points} điểm
+                    </span>
+                  )}
+                </div>
               </div>
             ))}
             
             {filteredCustomers.length === 0 && searchTerm && (
-              <div className="p-4 text-center text-gray-500">
+              <div className="p-4 text-center text-gray-500 text-sm">
                 Không tìm thấy khách hàng
               </div>
             )}
-          </div>
-          
-          <div className="p-3 border-t bg-gray-50">
-            <button
-              onClick={handleAddNewCustomer}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
-              <UserPlus className="w-4 h-4" />
-              <span className="text-sm font-medium">Thêm khách hàng mới</span>
-            </button>
           </div>
         </div>
       )}

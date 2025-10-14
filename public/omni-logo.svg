@@ -1,0 +1,13 @@
+<svg width="400" height="160" viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg">
+  <!-- O Circle (Green) -->
+  <circle cx="80" cy="80" r="60" fill="none" stroke="#5FA54A" stroke-width="12"/>
+  
+  <!-- O Inner rectangle (Green) -->
+  <rect x="65" y="50" width="30" height="60" rx="15" fill="#5FA54A"/>
+  
+  <!-- MNI Text (Blue) -->
+  <text x="150" y="120" font-family="Arial, sans-serif" font-size="90" font-weight="bold" fill="#0033CC">
+    MNI
+  </text>
+</svg>
+

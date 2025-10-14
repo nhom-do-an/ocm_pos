@@ -8,20 +8,24 @@ export const OrderTabs: React.FC = () => {
   const { orderTabs, activeTabId, addTab, removeTab, setActiveTab } = usePOSStore();
 
   return (
-    <div className="flex items-center gap-2 border-b border-gray-200 bg-white px-4">
+    <div className="flex items-center gap-2 bg-white border-b border-gray-200 px-4 py-2 shadow-sm">
       {orderTabs.map((tab) => (
         <div
           key={tab.id}
-          className={`relative flex items-center gap-2 px-4 py-3 cursor-pointer transition-colors border-b-2 ${
-            activeTabId === tab.id
-              ? 'border-blue-600 bg-blue-50 text-blue-700'
-              : 'border-transparent hover:bg-gray-50'
-          }`}
           onClick={() => setActiveTab(tab.id)}
+          className={`relative flex items-center gap-2 px-4 py-2.5 rounded-lg cursor-pointer transition-all duration-200 ${
+            activeTabId === tab.id
+              ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-md shadow-blue-500/30'
+              : 'bg-gray-50 text-gray-700 hover:bg-gray-100 hover:shadow-sm'
+          }`}
         >
-          <span className="font-medium">{tab.name}</span>
+          <span className="font-semibold text-sm">{tab.name}</span>
           {tab.cart.length > 0 && (
-            <span className="bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+            <span className={`text-xs px-2 py-0.5 rounded-full font-medium transition-all ${
+              activeTabId === tab.id 
+                ? 'bg-white text-blue-600 shadow-sm' 
+                : 'bg-blue-600 text-white'
+            }`}>
               {tab.cart.length}
             </span>
           )}
@@ -31,9 +35,13 @@ export const OrderTabs: React.FC = () => {
                 e.stopPropagation();
                 removeTab(tab.id);
               }}
-              className="ml-2 text-gray-400 hover:text-red-600"
+              className={`ml-1 hover:scale-110 rounded-full p-1 transition-all ${
+                activeTabId === tab.id 
+                  ? 'text-white hover:bg-white/20' 
+                  : 'text-gray-500 hover:bg-gray-200'
+              }`}
             >
-              <X className="w-4 h-4" />
+              <X className="w-3.5 h-3.5" />
             </button>
           )}
         </div>
@@ -41,10 +49,11 @@ export const OrderTabs: React.FC = () => {
       
       <button
         onClick={addTab}
-        className="flex items-center gap-1 px-3 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+        className="flex items-center gap-1.5 px-4 py-2.5 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-all duration-200 hover:shadow-sm font-medium text-sm"
+        title="Thêm đơn mới"
       >
         <Plus className="w-4 h-4" />
-        <span className="text-sm font-medium">Thêm đơn</span>
+        <span>Thêm</span>
       </button>
     </div>
   );

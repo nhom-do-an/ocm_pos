@@ -1,5 +1,7 @@
 ﻿import { create } from 'zustand';
 import { Product, CartItem, Order, Customer, Branch, Employee, OrderTab } from '@/types';
+import { variantApi, VariantResponse } from '@/lib/api/variant-api';
+import { locationApi, LocationResponse } from '@/lib/api/location-api';
 
 interface POSStore {
   // Multi-tab orders
@@ -53,6 +55,15 @@ interface POSStore {
   setEmployees: (employees: Employee[]) => void;
   addCustomer: (customer: Customer) => void;
   
+  // API actions
+  loadProducts: () => Promise<void>;
+  loadBranches: () => Promise<void>;
+  searchProducts: (keyword: string) => Promise<Product[]>;
+  
+  // Loading states
+  isLoadingProducts: boolean;
+  isLoadingBranches: boolean;
+  
   // Computed values
   getActiveTab: () => OrderTab | undefined;
   getSubtotal: () => number;
@@ -77,6 +88,8 @@ export const usePOSStore = create<POSStore>((set, get) => ({
   selectedEmployeeId: '',
   selectedCustomerId: undefined,
   tax: 0.1,
+  isLoadingProducts: false,
+  isLoadingBranches: false,
   
   // Tab management
   addTab: () => {
@@ -259,8 +272,11 @@ export const usePOSStore = create<POSStore>((set, get) => ({
     
     const { tax, selectedBranchId, selectedEmployeeId, selectedCustomerId } = get();
     const subtotal = get().getSubtotal();
-    const taxAmount = subtotal * tax;
-    const total = subtotal + taxAmount - activeTab.discount;
+    // Calculate discount amount from percentage
+    const discountAmount = subtotal * (activeTab.discount || 0) / 100;
+    const afterDiscount = subtotal - discountAmount;
+    const taxAmount = afterDiscount * tax;
+    const total = afterDiscount + taxAmount;
     
     const customer = get().getSelectedCustomer();
     
@@ -269,7 +285,7 @@ export const usePOSStore = create<POSStore>((set, get) => ({
       items: activeTab.cart,
       subtotal,
       tax: taxAmount,
-      discount: activeTab.discount,
+      discount: discountAmount, // Store as amount for order history
       total,
       paymentMethod,
       status: 'completed',
@@ -334,6 +350,99 @@ export const usePOSStore = create<POSStore>((set, get) => ({
   addCustomer: (customer) => {
     set({ customers: [customer, ...get().customers] });
   },
+
+  // API actions
+  loadProducts: async () => {
+    // Only run on client-side
+    if (typeof window === 'undefined') {
+      console.log('⏭️ Skipping loadProducts on server-side');
+      return;
+    }
+
+    set({ isLoadingProducts: true });
+    try {
+      console.log('🔄 Loading products from API...');
+      
+      // Load first page to get total count and actual page size
+      const firstPage = await variantApi.getVariants({ page: 1, limit: 100 });
+      const totalCount = firstPage.count;
+      const actualPageSize = firstPage.variants.length; // API may limit to 10 items
+      const totalPages = Math.ceil(totalCount / actualPageSize);
+      
+      console.log(`📊 Total: ${totalCount} products, Page size: ${actualPageSize}, Pages needed: ${totalPages}`);
+      
+      let allVariants = [...firstPage.variants];
+      
+      // Load remaining pages if needed (max 50 pages = 500 items)
+      if (totalPages > 1) {
+        const maxPages = Math.min(totalPages, 50);
+        console.log(`🔄 Loading ${maxPages - 1} more pages in batches...`);
+        
+        // Batch load 10 pages at a time to avoid overwhelming the server
+        const batchSize = 10;
+        for (let batchStart = 2; batchStart <= maxPages; batchStart += batchSize) {
+          const batchEnd = Math.min(batchStart + batchSize - 1, maxPages);
+          const promises = [];
+          
+          for (let page = batchStart; page <= batchEnd; page++) {
+            promises.push(variantApi.getVariants({ page, limit: 100 }));
+          }
+          
+          console.log(`   ⏳ Loading pages ${batchStart}-${batchEnd}...`);
+          const results = await Promise.all(promises);
+          results.forEach(result => {
+            allVariants = allVariants.concat(result.variants);
+          });
+          console.log(`   ✅ Loaded ${allVariants.length} so far...`);
+        }
+      }
+      
+      const products = mapVariantsToProducts(allVariants);
+      console.log(`✅ Loaded ${products.length} products successfully (from ${totalCount} total)`);
+      set({ products, isLoadingProducts: false });
+    } catch (error: any) {
+      console.error('❌ Failed to load products:', error?.message || error);
+      console.warn('⚠️ Using empty product list');
+      set({ products: [], isLoadingProducts: false });
+    }
+  },
+
+  loadBranches: async () => {
+    // Only run on client-side
+    if (typeof window === 'undefined') {
+      console.log('⏭️ Skipping loadBranches on server-side');
+      return;
+    }
+
+    set({ isLoadingBranches: true });
+    try {
+      console.log('🔄 Loading branches from API...');
+      const locations = await locationApi.getLocations();
+      const branches = mapLocationsToBranches(locations);
+      console.log(`✅ Loaded ${branches.length} branches successfully`);
+      set({ branches, isLoadingBranches: false });
+      
+      // Auto select first branch
+      if (branches.length > 0 && !get().selectedBranchId) {
+        set({ selectedBranchId: branches[0].id });
+        console.log(`✅ Auto-selected branch: ${branches[0].name}`);
+      }
+    } catch (error: any) {
+      console.error('❌ Failed to load branches:', error?.message || error);
+      console.warn('⚠️ Using empty branch list');
+      set({ branches: [], isLoadingBranches: false });
+    }
+  },
+
+  searchProducts: async (keyword: string) => {
+    try {
+      const variants = await variantApi.searchVariants(keyword, 50);
+      return mapVariantsToProducts(variants);
+    } catch (error) {
+      console.error('Failed to search products:', error);
+      return [];
+    }
+  },
   
   getSubtotal: () => {
     const activeTab = get().getActiveTab();
@@ -345,8 +454,11 @@ export const usePOSStore = create<POSStore>((set, get) => ({
     const activeTab = get().getActiveTab();
     if (!activeTab) return 0;
     const subtotal = get().getSubtotal();
-    const taxAmount = subtotal * get().tax;
-    return subtotal + taxAmount - activeTab.discount;
+    // Discount is now in percentage (0-100)
+    const discountAmount = subtotal * (activeTab.discount || 0) / 100;
+    const afterDiscount = subtotal - discountAmount;
+    const taxAmount = afterDiscount * get().tax;
+    return afterDiscount + taxAmount;
   },
   
   getSelectedCustomer: () => {
@@ -355,3 +467,29 @@ export const usePOSStore = create<POSStore>((set, get) => ({
     return get().customers.find(c => c.id === customerId);
   },
 }));
+
+// Helper functions to map API data to app types
+function mapVariantsToProducts(variants: VariantResponse[]): Product[] {
+  return variants.map(v => ({
+    id: v.id.toString(),
+    name: v.product_name || v.title,
+    price: v.price,
+    category: 'Sản phẩm',
+    image: v.image?.url || '/placeholder-product.jpg',
+    sku: v.sku || '',
+    barcode: v.barcode || '',
+    stock: v.inventory_quantity || 0,
+    unit: v.unit || 'cái',
+  }));
+}
+
+function mapLocationsToBranches(locations: LocationResponse[]): Branch[] {
+  return locations.map(l => ({
+    id: l.id.toString(),
+    name: l.name,
+    address: l.address || 'Chưa có địa chỉ',
+    phone: l.phone || '',
+    email: l.email || '',
+    isDefault: l.default_location,
+  }));
+}

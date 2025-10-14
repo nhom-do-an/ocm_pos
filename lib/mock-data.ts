@@ -1,4 +1,4 @@
-﻿import { Branch, Employee, Customer, Product } from '@/types';
+﻿import { Branch, Employee, Customer, Product, User } from '@/types';
 
 export const mockBranches: Branch[] = [
   {
@@ -208,3 +208,5 @@ export const mockProducts: Product[] = [
     branchStock: { 'BR001': 18, 'BR002': 12, 'BR003': 10 }
   },
 ];
+
+// Mock users removed - using real API authentication
