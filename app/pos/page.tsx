@@ -143,16 +143,13 @@ export default function POSPage() {
                   value={selectedEmployeeId}
                   onChange={(e) => usePOSStore.getState().setEmployee(e.target.value)}
                   className="bg-transparent border-none text-sm font-medium focus:outline-none cursor-pointer text-gray-800 min-w-[120px]"
-                  disabled={!selectedBranchId}
                 >
                   <option value="">Nhân viên</option>
-                  {employees
-                    .filter(e => !selectedBranchId || e.branchId === selectedBranchId)
-                    .map(emp => (
-                      <option key={emp.id} value={emp.id}>
-                        {emp.name}
-                      </option>
-                    ))}
+                  {employees.map(emp => (
+                    <option key={emp.id} value={emp.id}>
+                      {emp.name} ({emp.code})
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -309,15 +306,21 @@ export default function POSPage() {
                     setIsPaymentModalOpen(true);
                   }}
                   disabled={!canCheckout}
-                  className={`w-full py-3.5 rounded-xl font-bold text-white transition-all duration-200 text-lg shadow-lg ${
+                  className={`w-full py-3.5 rounded-xl font-bold transition-all duration-200 text-lg shadow-lg ${
                     canCheckout
-                      ? 'bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 active:scale-95 shadow-primary-500/50'
-                      : 'bg-gray-300 cursor-not-allowed'
+                      ? 'bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 active:scale-95 shadow-green-500/50 text-white border-2 border-green-700'
+                      : 'bg-gray-300 cursor-not-allowed text-gray-500 border-2 border-gray-400'
                   }`}
+                  style={{
+                    color: canCheckout ? '#ffffff' : '#6b7280',
+                    textShadow: canCheckout ? '0 1px 2px rgba(0,0,0,0.3)' : 'none'
+                  }}
                 >
                   <div className="flex items-center justify-center gap-3">
-                    <span>Thanh toán</span>
-                    <span className="text-sm font-normal px-2 py-0.5 bg-white/20 rounded">F9</span>
+                    <span className="font-bold">Thanh toán</span>
+                    <span className={`text-sm font-normal px-2 py-0.5 rounded ${
+                      canCheckout ? 'bg-white/20 text-white' : 'bg-gray-400 text-gray-600'
+                    }`}>F9</span>
                   </div>
                 </button>
               </div>

@@ -4,10 +4,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Search, UserPlus, X } from 'lucide-react';
 import { usePOSStore } from '@/store/pos-store';
 import { Customer } from '@/types';
+import { AddCustomerModal } from '@/components/customer/add-customer-modal';
 
 export const CustomerSearch: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [showAddCustomerModal, setShowAddCustomerModal] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   
@@ -20,23 +22,14 @@ export const CustomerSearch: React.FC = () => {
   );
 
   const handleAddNewCustomer = () => {
-    const name = prompt('Tên khách hàng:');
-    const phone = prompt('Số điện thoại:');
-    
-    if (name && phone) {
-      const newCustomer: Customer = {
-        id: `CUS-${Date.now()}`,
-        name,
-        phone,
-        totalPurchases: 0,
-        points: 0,
-        createdAt: new Date(),
-      };
-      addCustomer(newCustomer);
-      setCustomer(newCustomer.id);
-      setIsOpen(false);
-      setSearchTerm('');
-    }
+    setShowAddCustomerModal(true);
+    setIsOpen(false);
+  };
+
+  const handleCustomerAdded = (newCustomer: Customer) => {
+    addCustomer(newCustomer);
+    setCustomer(newCustomer.id);
+    setSearchTerm('');
   };
 
   // F4 shortcut
@@ -148,6 +141,13 @@ export const CustomerSearch: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Add Customer Modal */}
+      <AddCustomerModal 
+        isOpen={showAddCustomerModal}
+        onClose={() => setShowAddCustomerModal(false)}
+        onCustomerAdded={handleCustomerAdded}
+      />
     </div>
   );
 };

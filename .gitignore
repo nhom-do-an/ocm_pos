@@ -33,6 +33,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-.eslintrc.json
-API_INTEGRATION.md
+
 

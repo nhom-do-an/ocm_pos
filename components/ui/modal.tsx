@@ -23,34 +23,41 @@ export const Modal: React.FC<ModalProps> = ({
   if (!isOpen) return null;
 
   const sizes = {
-    sm: 'max-w-md',
-    md: 'max-w-lg',
-    lg: 'max-w-2xl',
-    xl: 'max-w-4xl',
+    sm: 'max-w-sm',
+    md: 'max-w-2xl',
+    lg: 'max-w-4xl',
+    xl: 'max-w-6xl',
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto">
+      {/* Backdrop with blur effect */}
       <div
-        className="absolute inset-0 bg-black bg-opacity-50"
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
         onClick={onClose}
       />
+      
+      {/* Modal content */}
       <div
         className={cn(
-          'relative bg-white rounded-lg shadow-xl w-full mx-4',
+          'relative bg-white rounded-xl shadow-2xl w-full mx-4 animate-fade-in-up',
           sizes[size]
         )}
       >
-        <div className="flex items-center justify-between p-4 border-b">
-          <h2 className="text-xl font-semibold">{title}</h2>
+        {/* Header */}
+        <div className="flex items-center justify-between p-5 border-b">
+          <h2 className="text-xl font-bold text-gray-800">{title}</h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 transition-colors"
+            className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full p-2 transition-all"
+            aria-label="Close"
           >
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5" />
           </button>
         </div>
-        <div className="p-6">{children}</div>
+        
+        {/* Body */}
+        <div className="p-5">{children}</div>
       </div>
     </div>
   );
