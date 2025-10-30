@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Eye, Download, Search, Filter, FileText } from 'lucide-react';
+import { Eye, Download, Search, Filter, FileText, Building2 } from 'lucide-react';
 import { Sidebar } from '@/components/layout/sidebar';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,7 +12,13 @@ import { Order } from '@/types';
 import { mockBranches, mockEmployees } from '@/lib/mock-data';
 
 export default function OrdersPage() {
-  const { orders, branches, employees, setBranches, setEmployees } = usePOSStore();
+  const { 
+    orders, 
+    branches, 
+    employees, 
+    loadBranches,
+    setEmployees 
+  } = usePOSStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedBranch, setSelectedBranch] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all');
@@ -22,9 +28,9 @@ export default function OrdersPage() {
   const [dateTo, setDateTo] = useState('');
 
   useEffect(() => {
-    setBranches(mockBranches);
+    loadBranches(); // Load branches from API
     setEmployees(mockEmployees);
-  }, [setBranches, setEmployees]);
+  }, [loadBranches, setEmployees]);
 
   const getPaymentMethodLabel = (method: string) => {
     switch (method) {

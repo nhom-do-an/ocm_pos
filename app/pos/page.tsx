@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { ProductCard } from '@/components/pos/product-card';
 import { Cart } from '@/components/pos/cart';
 import { PaymentModal } from '@/components/pos/payment-modal';
 import { OrderTabs } from '@/components/pos/order-tabs';
@@ -221,22 +220,17 @@ export default function POSPage() {
                   <div className="relative">
                     <input
                       id="discount-input"
-                      type="number"
-                      value={activeTab?.discount || 0}
+                      type="text"
+                      value={(activeTab?.discount || 0) > 0 ? activeTab?.discount : ''}
+                      placeholder=""
                       onChange={(e) => {
-                        const value = Number(e.target.value);
-                        if (value >= 0 && value <= 100) {
-                          setDiscount(value);
-                        }
+                        const value = e.target.value.replace(/[^\d]/g, '');
+                        const numValue = value ? Math.min(100, parseInt(value)) : 0;
+                        setDiscount(numValue);
                       }}
                       className="w-24 px-3 py-1.5 border border-gray-300 rounded-lg text-right text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-                      min="0"
-                      max="100"
-                      step="0.1"
                     />
-                    <span className="absolute right-2 top-1/2 transform -translate-y-1/2 text-xs text-gray-400 font-medium">
-                      %
-                    </span>
+                    {/* Đã loại bỏ dấu % */}
                   </div>
                 </div>
 
@@ -280,16 +274,37 @@ export default function POSPage() {
 
               {/* Print Receipt & Payment Button */}
               <div className="space-y-3">
-                <label className="flex items-center cursor-pointer text-sm text-gray-700">
+                <div className="flex items-center">
                   <input
                     type="checkbox"
+                    id="auto-print-invoice"
+                    className="hidden"
                     checked={printReceipt}
                     onChange={(e) => setPrintReceipt(e.target.checked)}
-                    className="form-checkbox h-4 w-4 text-primary-600 rounded focus:ring-primary-500 transition-all"
                   />
-                  <span className="ml-2">In hóa đơn tự động</span>
-                  <span className="text-xs text-gray-400 ml-auto">F10</span>
-                </label>
+                  <label
+                    htmlFor="auto-print-invoice"
+                    className={`flex items-center w-full px-3 py-2 rounded cursor-pointer border ${
+                      printReceipt 
+                        ? 'bg-blue-50 border-blue-500 text-blue-700' 
+                        : 'bg-gray-50 border-gray-200 text-gray-700'
+                    }`}
+                  >
+                    <span className={`inline-block w-4 h-4 mr-2 rounded border ${
+                      printReceipt 
+                        ? 'bg-blue-500 border-blue-500' 
+                        : 'bg-white border-gray-300'
+                    }`}>
+                      {printReceipt && (
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className="w-4 h-4">
+                          <path fillRule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clipRule="evenodd" />
+                        </svg>
+                      )}
+                    </span>
+                    In hóa đơn tự động
+                    <span className="text-xs text-gray-400 ml-auto">F10</span>
+                  </label>
+                </div>
 
                 <button
                   onClick={() => {

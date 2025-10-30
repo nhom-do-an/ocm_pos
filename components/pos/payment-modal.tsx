@@ -103,7 +103,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) =
         <div className="flex flex-col">
           {/* Cash Payment */}
           {paymentMethod === 'cash' && (
-            <div className="bg-green-50 rounded-xl border border-green-200 animate-fade-in h-full">
+            <div className="bg-green-50 rounded-xl border border-green-200 animate-fade-in h-[260px]">
               <div className="p-4">
                 <div className="flex items-center mb-3">
                   <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mr-3">
@@ -153,7 +153,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) =
           
           {/* Card Payment */}
           {paymentMethod === 'card' && (
-            <div className="bg-blue-50 rounded-xl border border-blue-200 animate-fade-in h-full">
+            <div className="bg-blue-50 rounded-xl border border-blue-200 animate-fade-in h-[260px]">
               <div className="p-4">
                 <div className="flex items-center mb-3">
                   <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3">
@@ -197,7 +197,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) =
           
           {/* Transfer Payment */}
           {paymentMethod === 'transfer' && (
-            <div className="bg-purple-50 rounded-xl border border-purple-200 animate-fade-in h-full">
+            <div className="bg-purple-50 rounded-xl border border-purple-200 animate-fade-in h-[260px]">
               <div className="p-4">
                 <div className="flex items-center mb-3">
                   <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mr-3">
