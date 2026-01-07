@@ -5,25 +5,25 @@ import { User, ChevronDown } from 'lucide-react';
 import { usePOSStore } from '@/store/pos-store';
 
 export const EmployeeSelector: React.FC = () => {
-  const { employees, selectedEmployeeId, setEmployee, selectedBranchId } = usePOSStore();
-  
-  const branchEmployees = employees.filter(e => 
-    !selectedBranchId || e.branchId === selectedBranchId
+  const { employees, selectedEmployeeId, setSelectedEmployee, selectedBranchId } = usePOSStore();
+
+  const branchEmployees = employees.filter(e =>
+    !selectedBranchId || e.id === selectedBranchId
   );
-  
+
   const selectedEmployee = employees.find(e => e.id === selectedEmployeeId);
 
   return (
     <div className="relative">
       <select
-        value={selectedEmployeeId}
-        onChange={(e) => setEmployee(e.target.value)}
+        value={selectedEmployeeId || ''}
+        onChange={(e) => setSelectedEmployee(e.target.value)}
         className="appearance-none w-full pl-10 pr-8 py-2 bg-white border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
         <option value="">Chọn nhân viên</option>
         {branchEmployees.map(employee => (
           <option key={employee.id} value={employee.id}>
-            {employee.name} ({employee.code})
+            {employee.name} ({employee.id})
           </option>
         ))}
       </select>
