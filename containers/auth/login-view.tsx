@@ -20,7 +20,7 @@ const LoginView: React.FC = () => {
           {/* Logo */}
           <div className="flex justify-center mb-2">
             <Image
-              src="/omni-logo.svg"
+              src="/pos/omni-logo.svg"
               alt="OMNI"
               width={180}
               height={60}

@@ -43,8 +43,8 @@ export const usePos = () => {
 
   const {
     loadBranches,
-    selectedBranchId,
-    branches,
+    selectedLocationId,
+    locations,
     getActiveTab,
     updateTabPrintReceipt,
     updateTabTransactions,
@@ -52,6 +52,10 @@ export const usePos = () => {
     resetTab,
     orderTabs,
   } = usePOSStore();
+
+  // Use selectedLocationId directly for reactivity
+  const selectedBranchId = selectedLocationId;
+  const branches = locations;
 
   const activeTab = getActiveTab();
 
@@ -199,18 +203,6 @@ export const usePos = () => {
       return;
     }
 
-
-
-    if (!activeTab.customerId) {
-      alert('Vui lòng chọn khách hàng để thanh toán!');
-      return;
-    }
-
-    if (transactions.length === 0) {
-      alert('Vui lòng thêm phương thức thanh toán!');
-      return;
-    }
-
     try {
       setIsCreatingOrder(true);
 
@@ -240,7 +232,7 @@ export const usePos = () => {
       const orderRequest: CreateOrderRequest = {
         assignee_id: currentUser.id,
         customer_id: parseInt(activeTab.customerId!),
-        location_id: localStorage.getItem('pos_location_id') ? parseInt(localStorage.getItem('pos_location_id')!) : parseInt(selectedBranchId!),
+        location_id: parseInt(selectedBranchId!),
         source_id: posSource.id,
         note: activeTab.note || '',
         line_items,
