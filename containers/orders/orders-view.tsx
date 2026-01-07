@@ -8,7 +8,6 @@ import { Modal } from '@/components/ui/modal';
 import { usePOSStore } from '@/store/pos-store';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import { Order, Location, Employee } from '@/types';
-import { mockEmployees } from '@/lib/mock-data';
 import { toast } from 'sonner';
 
 const OrdersView: React.FC = () => {
@@ -24,11 +23,6 @@ const OrdersView: React.FC = () => {
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [selectedPayment, setSelectedPayment] = useState('all');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-
-  useEffect(() => {
-    loadLocations(); // Load locations from API
-    setEmployees(mockEmployees);
-  }, [loadLocations, setEmployees]);
 
   const getPaymentMethodLabel = (method: string) => {
     switch (method) {
