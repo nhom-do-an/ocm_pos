@@ -1,10 +1,26 @@
-import { EDeliveryMethod, EFinancialStatus, EFulfillmentOrderStatus, EFulfillmentShipmentStatus, EFulfillmentStatus, EOrderReturnStatus, EOrderStatus } from '../enums/enum';
+import { EDeliveryMethod, EFinancialStatus, EFulfillmentOrderStatus, EFulfillmentShipmentStatus, EFulfillmentStatus, ELocationStatus, EOrderReturnStatus, EOrderStatus } from '../enums/enum';
 import { TUserResponse } from './auth';
-import { TChannelResponse } from './channel';
 import { CustomerDetail } from './customer';
 import { AddressDetail } from './customer';
-import { Location } from './locations';
 import { Source } from './source';
+
+export interface Location {
+    address: string;
+    code: string;
+    created_at: string;
+    default_location: boolean;
+    email: string;
+    fulfill_order: boolean;
+    id: number;
+    inventory_management: boolean;
+    name: string;
+    phone: string;
+    status: ELocationStatus;
+    store_id: number;
+    updated_at: string;
+    zip: string;
+}
+
 
 export interface Fulfillment {
     id?: number;
@@ -56,7 +72,6 @@ export interface OrderDetail extends Order {
     customer?: CustomerDetail;
     assignee?: TUserResponse;
     user?: TUserResponse;
-    channel?: TChannelResponse;
     source?: Source;
     location?: Location;
     fulfillments?: Fulfillment[];
