@@ -13,6 +13,9 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'OMNI POS System - Quản lý bán hàng chuyên nghiệp',
   description: 'Hệ thống POS hiện đại với giao diện đẹp, dễ sử dụng cho cửa hàng bán lẻ',
+  icons: {
+    icon: '/pos/favicon.svg',
+  },
 };
 
 export default function RootLayout({

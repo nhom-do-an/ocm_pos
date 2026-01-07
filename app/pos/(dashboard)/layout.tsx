@@ -1,11 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Wifi, ChevronDown } from 'lucide-react';
 import { useAuthStore } from '@/store/auth-store';
 import { TabType } from '@/components/layout/main-tabs';
 import { LocationSelector } from '@/components/layout/location-selector';
-import { CollapsibleSidebar } from '@/components/layout/collapsible-sidebar';
 import { OrderTabs } from '@/components/pos/order-tabs';
 import { ProductSearchDropdown } from '@/components/pos/product-search-dropdown';
 import { Toaster } from '@/components/ui/toaster';

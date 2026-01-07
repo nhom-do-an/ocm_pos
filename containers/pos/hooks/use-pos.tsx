@@ -240,7 +240,7 @@ export const usePos = () => {
       const orderRequest: CreateOrderRequest = {
         assignee_id: currentUser.id,
         customer_id: parseInt(activeTab.customerId!),
-        location_id: parseInt(selectedBranchId),
+        location_id: localStorage.getItem('pos_location_id') ? parseInt(localStorage.getItem('pos_location_id')!) : parseInt(selectedBranchId!),
         source_id: posSource.id,
         note: activeTab.note || '',
         line_items,
