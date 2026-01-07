@@ -1,4 +1,4 @@
-import { CollectionRule } from './../../../ocm_fe/types/response/collection';
+
 import { ECollectionType } from "../enums/enum";
 import { CreateInventoryQuantity } from "../request/product";
 import { Attachment } from '@/services/variant';
@@ -10,7 +10,6 @@ export interface Collection {
     description: string;
     type: ECollectionType;
     disjunctive?: boolean;
-    rules: CollectionRule[];
     meta_title: string;
     meta_description: string;
     image?: Attachment;
