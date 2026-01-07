@@ -1,5 +1,23 @@
+import { CollectionRule } from './../../../ocm_fe/types/response/collection';
+import { ECollectionType } from "../enums/enum";
 import { CreateInventoryQuantity } from "../request/product";
-import { Attachment, Collection } from "./collection";
+import { Attachment } from '@/services/variant';
+export interface Collection {
+    id?: number;
+    store_id?: number;
+    name: string;
+    alias?: string;
+    description: string;
+    type: ECollectionType;
+    disjunctive?: boolean;
+    rules: CollectionRule[];
+    meta_title: string;
+    meta_description: string;
+    image?: Attachment;
+    created_at?: string;
+    updated_at?: string;
+    products_count?: number;
+}
 
 export interface ProductAttribute {
     id?: number;
