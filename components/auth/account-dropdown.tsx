@@ -13,7 +13,7 @@ export const AccountDropdown: React.FC<AccountDropdownProps> = ({ onLoginClick }
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  
+
   const { currentUser, logout } = useAuthStore();
 
   // Close dropdown when clicking outside
@@ -64,7 +64,6 @@ export const AccountDropdown: React.FC<AccountDropdownProps> = ({ onLoginClick }
     );
   }
 
-  const roleBadge = getRoleBadge(currentUser.role);
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -73,13 +72,10 @@ export const AccountDropdown: React.FC<AccountDropdownProps> = ({ onLoginClick }
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-3 py-2 rounded-full bg-white border-2 border-gray-300 hover:border-primary-500 hover:bg-gray-50 transition-all shadow-sm"
       >
-        {currentUser.avatar ? (
-          <img src={currentUser.avatar} alt={currentUser.name} className="w-8 h-8 rounded-full object-cover" />
-        ) : (
-          <div className="w-8 h-8 bg-gradient-to-br from-primary-600 to-primary-700 rounded-full flex items-center justify-center text-white text-sm font-bold">
-            {currentUser.name.charAt(0)}
-          </div>
-        )}
+
+        <div className="w-8 h-8 bg-gradient-to-br from-primary-600 to-primary-700 rounded-full flex items-center justify-center text-white text-sm font-bold">
+          {currentUser.name.charAt(0)}
+        </div>
         <span className="text-sm font-medium text-gray-800 hidden md:block">{currentUser.name}</span>
         <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
@@ -91,18 +87,13 @@ export const AccountDropdown: React.FC<AccountDropdownProps> = ({ onLoginClick }
           <div className="p-4 border-b border-gray-200 bg-gray-50">
             <div className="flex items-start gap-3">
               <div className="w-12 h-12 bg-gradient-to-br from-primary-600 to-primary-700 rounded-full flex items-center justify-center flex-shrink-0">
-                {currentUser.avatar ? (
-                  <img src={currentUser.avatar} alt={currentUser.name} className="w-full h-full rounded-full" />
-                ) : (
-                  <User className="w-6 h-6 text-white" />
-                )}
+
+                <User className="w-6 h-6 text-white" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-semibold text-gray-900 truncate">{currentUser.name}</p>
                 <p className="text-sm text-gray-600 truncate">{currentUser.email}</p>
-                <span className={`inline-block mt-2 px-2 py-0.5 rounded-full text-xs font-medium ${roleBadge.color}`}>
-                  {roleBadge.label}
-                </span>
+
               </div>
             </div>
           </div>
