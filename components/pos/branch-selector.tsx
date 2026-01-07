@@ -5,14 +5,14 @@ import { Building2, ChevronDown } from 'lucide-react';
 import { usePOSStore } from '@/store/pos-store';
 
 export const BranchSelector: React.FC = () => {
-  const { branches, selectedBranchId, setBranch } = usePOSStore();
+  const { branches, selectedBranchId, setSelectedBranch } = usePOSStore();
   const selectedBranch = branches.find(b => b.id === selectedBranchId);
 
   return (
     <div className="relative">
       <select
-        value={selectedBranchId}
-        onChange={(e) => setBranch(e.target.value)}
+        value={selectedBranchId || ''}
+        onChange={(e) => setSelectedBranch(e.target.value)}
         className="appearance-none w-full pl-10 pr-8 py-2 bg-white border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
         <option value="">Chọn chi nhánh</option>
