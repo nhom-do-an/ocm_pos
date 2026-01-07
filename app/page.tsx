@@ -12,12 +12,12 @@ export default function HomePage() {
     // Wait for auth to initialize
     if (!isInitialized) return;
 
-    // Redirect based on auth status
-    // if (currentUser) {
-    //   router.replace('/pos');
-    // } else {
-    //   router.replace('/pos/login');
-    // }
+
+    if (currentUser) {
+      router.replace('/pos');
+    } else {
+      router.replace('/pos/login');
+    }
   }, [currentUser, isInitialized, router]);
 
   return (
