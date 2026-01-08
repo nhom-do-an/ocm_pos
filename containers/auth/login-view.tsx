@@ -13,10 +13,10 @@ const LoginView: React.FC = () => {
     useLoginFormik();
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-blue-100">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center p-3 sm:p-4 bg-gradient-to-br from-blue-50 to-blue-100">
+      <div className="w-full max-w-sm sm:max-w-md">
         {/* Login Card */}
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl p-5 sm:p-8">
           {/* Logo */}
           <div className="flex justify-center mb-2">
             <Image
@@ -29,7 +29,7 @@ const LoginView: React.FC = () => {
           </div>
 
           {/* Title */}
-          <h1 className="text-xl font-bold text-center text-gray-800 mb-10 whitespace-nowrap">
+          <h1 className="text-lg sm:text-xl font-bold text-center text-gray-800 mb-6 sm:mb-10">
             Đăng nhập vào cửa hàng của bạn
           </h1>
 

@@ -78,23 +78,23 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Thêm phương thức thanh toán" size='md'>
-      <div className="space-y-4">
+    <Modal isOpen={isOpen} onClose={onClose} title="Thêm phương thức thanh toán" size='sm'>
+      <div className="space-y-3 sm:space-y-4">
         {/* Payment Method Selection */}
         <div>
-          <label className="block text-sm font-semibold text-gray-800 mb-2">
+          <label className="block text-xs sm:text-sm font-semibold text-gray-800 mb-1.5 sm:mb-2">
             Phương thức thanh toán
           </label>
           <Select value={selectedMethod?.id.toString()} onValueChange={(value) => {
             const method = paymentMethods.find(m => m.id.toString() === value);
             if (method) setSelectedMethod(method);
           }}>
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full text-xs sm:text-sm">
               <SelectValue placeholder="Chọn phương thức thanh toán" />
             </SelectTrigger>
             <SelectContent>
               {paymentMethods.map((method) => (
-                <SelectItem key={method.id} value={method.id.toString()}>
+                <SelectItem key={method.id} value={method.id.toString()} className="text-xs sm:text-sm">
                   {method.name}
                 </SelectItem>
               ))}
@@ -104,11 +104,11 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
         {/* Amount Input */}
         <div>
-          <label className="block text-sm font-semibold text-gray-800 mb-2">
+          <label className="block text-xs sm:text-sm font-semibold text-gray-800 mb-1.5 sm:mb-2">
             Số tiền thanh toán
           </label>
           <div className="relative">
-            <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">
+            <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium text-sm sm:text-base">
               ₫
             </span>
             <input
@@ -116,17 +116,17 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
               onChange={handleAmountChange}
               placeholder="0"
               type="text"
-              className="w-full pl-10 pr-4 py-1  border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all font-medium"
+              className="w-full pl-8 sm:pl-10 pr-3 sm:pr-4 py-2 sm:py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all font-medium text-sm sm:text-base"
             />
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-3 pt-4">
+        <div className="flex gap-2 sm:gap-3 pt-3 sm:pt-4">
           <Button
             variant="outline"
             onClick={onClose}
-            className="flex-1 cursor-pointer"
+            className="flex-1 cursor-pointer text-xs sm:text-sm py-2 sm:py-2.5"
           >
             Hủy
           </Button>
@@ -134,12 +134,12 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
             variant="primary"
             onClick={handleAddTransaction}
             disabled={!selectedMethod || !amount || parseFloat(amount) <= 0}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 cursor-pointer"
+            className="flex-1 bg-blue-600 hover:bg-blue-700 cursor-pointer text-xs sm:text-sm py-2 sm:py-2.5"
           >
             Xác nhận
           </Button>
         </div>
-      </div >
-    </Modal >
+      </div>
+    </Modal>
   );
 };

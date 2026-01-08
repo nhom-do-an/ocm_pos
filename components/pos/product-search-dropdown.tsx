@@ -165,9 +165,9 @@ export const ProductSearchDropdown: React.FC = () => {
   }, []);
 
   return (
-    <div className="relative rounded-full bg-white text-black w-[450px] " ref={dropdownRef}>
+    <div className="relative rounded-full bg-white text-black w-full sm:w-[320px] md:w-[400px] lg:w-[450px]" ref={dropdownRef}>
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+        <Search className="absolute left-2.5 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 sm:w-5 sm:h-5" />
         <input
           ref={inputRef}
           type="text"
@@ -182,10 +182,10 @@ export const ProductSearchDropdown: React.FC = () => {
             setIsOpen(true);
             loadInitialProducts();
           }}
-          placeholder="Nhập tên sản phẩm hoặc mã SKU (F3)"
-          className="w-full pl-10 pr-16 py-2.5 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
+          placeholder="Tìm sản phẩm hoặc SKU (F3)"
+          className="w-full pl-8 sm:pl-10 pr-12 sm:pr-16 py-2 sm:py-2.5 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600 text-xs sm:text-sm"
         />
-        <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-gray-400 font-medium bg-gray-100 px-2 py-1 rounded">
+        <span className="absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2 text-[10px] sm:text-xs text-gray-400 font-medium bg-gray-100 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded hidden sm:inline">
           F3
         </span>
       </div>
@@ -195,7 +195,7 @@ export const ProductSearchDropdown: React.FC = () => {
         <div
           ref={scrollRef}
           onScroll={handleScroll}
-          className="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-xl max-h-96 overflow-y-auto"
+          className="absolute z-50 mt-1 w-full min-w-[280px] sm:min-w-0 bg-white border border-gray-200 rounded-lg shadow-xl max-h-72 sm:max-h-96 overflow-y-auto"
         >
           {variants.length > 0 ? (
             <>
@@ -212,13 +212,13 @@ export const ProductSearchDropdown: React.FC = () => {
                     key={`${variant.id}-${index}`}
                     onClick={() => !isOutOfStock && handleSelectVariant(variant)}
                     onMouseEnter={() => setSelectedIndex(index)}
-                    className={`px-4 py-3 border-b border-gray-100 last:border-0 transition-colors ${isOutOfStock
+                    className={`px-2 sm:px-4 py-2 sm:py-3 border-b border-gray-100 last:border-0 transition-colors ${isOutOfStock
                       ? 'cursor-not-allowed opacity-50 bg-gray-50'
                       : 'cursor-pointer ' + (index === selectedIndex ? 'bg-blue-50 border-l-4 border-l-blue-600' : 'hover:bg-gray-50')
                       }`}
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden">
                         {variant.image?.url ? (
                           <img
                             src={variant.image.url}
@@ -226,31 +226,31 @@ export const ProductSearchDropdown: React.FC = () => {
                             className="w-full h-full object-cover"
                           />
                         ) : (
-                          <span className="text-xl">📦</span>
+                          <span className="text-base sm:text-xl">📦</span>
                         )}
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-gray-900 truncate">
+                        <p className="font-medium text-gray-900 truncate text-xs sm:text-sm">
                           {productName}
-                          {variantInfo && <span className="text-gray-500 text-sm ml-2">({variantInfo})</span>}
+                          {variantInfo && <span className="text-gray-500 text-[10px] sm:text-sm ml-1 sm:ml-2">({variantInfo})</span>}
                         </p>
-                        <div className="flex items-center gap-3 text-xs text-gray-500 mt-0.5">
-                          {variant.sku && <span>SKU: {variant.sku}</span>}
-                          {variant.sku && <span>•</span>}
+                        <div className="flex flex-wrap items-center gap-1 sm:gap-3 text-[10px] sm:text-xs text-gray-500 mt-0.5">
+                          {variant.sku && <span className="hidden sm:inline">SKU: {variant.sku}</span>}
+                          {variant.sku && <span className="hidden sm:inline">•</span>}
                           <span className={isOutOfStock ? 'text-red-600 font-semibold' : ''}>
-                            Có thể bán: {variant.inventory_quantity || 0}
-                            {isOutOfStock && ' (Hết hàng)'}
+                            Tồn: {variant.inventory_quantity || 0}
+                            {isOutOfStock && ' (Hết)'}
                           </span>
                         </div>
                       </div>
 
-                      <div className="text-right">
-                        <p className="font-semibold text-blue-600">
+                      <div className="text-right shrink-0">
+                        <p className="font-semibold text-blue-600 text-xs sm:text-sm">
                           {formatCurrency(variant.price || 0)}
                         </p>
                         {variant.unit && (
-                          <p className="text-xs text-gray-500">/{variant.unit}</p>
+                          <p className="text-[10px] sm:text-xs text-gray-500">/{variant.unit}</p>
                         )}
                       </div>
                     </div>
@@ -258,17 +258,17 @@ export const ProductSearchDropdown: React.FC = () => {
                 );
               })}
               {isLoading && (
-                <div className="p-3 text-center text-gray-500 text-sm border-t">
+                <div className="p-2 sm:p-3 text-center text-gray-500 text-xs sm:text-sm border-t">
                   Đang tải thêm...
                 </div>
               )}
             </>
           ) : isLoading ? (
-            <div className="p-4 text-center text-gray-500 text-sm">
+            <div className="p-3 sm:p-4 text-center text-gray-500 text-xs sm:text-sm">
               Đang tìm kiếm...
             </div>
           ) : (
-            <div className="p-4 text-center text-gray-500 text-sm">
+            <div className="p-3 sm:p-4 text-center text-gray-500 text-xs sm:text-sm">
               Không tìm thấy sản phẩm
             </div>
           )}

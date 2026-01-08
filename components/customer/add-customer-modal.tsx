@@ -108,10 +108,10 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Thêm mới khách hàng" size="md">
       <div className="" onKeyDown={handleKeyDown}>
-        <div className="space-y-2 flex flex-wrap gap-1 items-center justify-between mb-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-3 sm:mb-4">
           {/* Last Name */}
-          <div className='w-[48%]'>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div>
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
               Họ <span className="text-red-500">*</span>
             </label>
             <input
@@ -119,14 +119,14 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
               value={formData.lastName}
               onChange={(e) => handleInputChange('lastName', e.target.value)}
               placeholder="Nhập họ"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm"
+              className="w-full px-2.5 sm:px-3 py-1.5 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-xs sm:text-sm"
               disabled={isLoading}
             />
           </div>
 
           {/* First Name */}
-          <div className='w-[48%]'>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div>
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
               Tên <span className="text-red-500">*</span>
             </label>
             <input
@@ -134,33 +134,33 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
               value={formData.firstName}
               onChange={(e) => handleInputChange('firstName', e.target.value)}
               placeholder="Nhập tên"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm"
+              className="w-full px-2.5 sm:px-3 py-1.5 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-xs sm:text-sm"
               disabled={isLoading}
             />
           </div>
 
           {/* Phone */}
-          <div className='w-[48%]'>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div>
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
               Số điện thoại <span className="text-red-500">*</span>
             </label>
             <div className="relative">
-              <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Phone className="absolute left-2.5 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 sm:w-5 sm:h-5" />
               <input
                 type="tel"
                 value={formData.phone}
                 onChange={(e) => handleInputChange('phone', e.target.value)}
                 placeholder="Nhập số điện thoại"
-                className="w-full pl-12 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm"
+                className="w-full pl-9 sm:pl-12 pr-3 sm:pr-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-xs sm:text-sm"
                 disabled={isLoading}
               />
             </div>
           </div>
 
           {/* Gender */}
-          <div className='w-[48%]'>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Giới tính</label>
-            <div className="flex gap-4">
+          <div>
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Giới tính</label>
+            <div className="flex gap-3 sm:gap-4 flex-wrap">
               {[
                 { value: 'male', label: 'Nam' },
                 { value: 'female', label: 'Nữ' },
@@ -173,41 +173,41 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
                     value={option.value}
                     checked={formData.gender === option.value}
                     onChange={(e) => handleInputChange('gender', e.target.value)}
-                    className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+                    className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 focus:ring-blue-500"
                     disabled={isLoading}
                   />
-                  <span className="ml-2 text-sm text-gray-700">{option.label}</span>
+                  <span className="ml-1.5 sm:ml-2 text-xs sm:text-sm text-gray-700">{option.label}</span>
                 </label>
               ))}
             </div>
           </div>
 
           {/* Date of Birth */}
-          <div className='w-[48%]'>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Ngày sinh</label>
+          <div>
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Ngày sinh</label>
             <div className="relative">
-              <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Calendar className="absolute left-2.5 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 sm:w-5 sm:h-5" />
               <input
                 type="date"
                 value={formData.dob}
                 onChange={(e) => handleInputChange('dob', e.target.value)}
-                className="w-full pl-12 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm"
+                className="w-full pl-9 sm:pl-12 pr-3 sm:pr-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-xs sm:text-sm"
                 disabled={isLoading}
               />
             </div>
           </div>
 
           {/* Note */}
-          <div className='w-[48%]'>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Ghi chú</label>
+          <div className="sm:col-span-2">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">Ghi chú</label>
             <div className="relative">
-              <FileText className="absolute left-3 top-3 text-gray-400 w-5 h-5" />
+              <FileText className="absolute left-2.5 sm:left-3 top-2 sm:top-3 text-gray-400 w-4 h-4 sm:w-5 sm:h-5" />
               <textarea
                 value={formData.note}
                 onChange={(e) => handleInputChange('note', e.target.value)}
                 placeholder="Nhập ghi chú về khách hàng..."
-                rows={3}
-                className="w-full pl-12 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm resize-none"
+                rows={2}
+                className="w-full pl-9 sm:pl-12 pr-3 sm:pr-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-xs sm:text-sm resize-none"
                 disabled={isLoading}
               />
             </div>
@@ -216,18 +216,18 @@ export const AddCustomerModal: React.FC<AddCustomerModalProps> = ({
       </div>
 
       {/* Action Buttons */}
-      <div className="flex justify-end gap-3 pt-3 px-2 border-t border-gray-200 ">
+      <div className="flex justify-end gap-2 sm:gap-3 pt-2 sm:pt-3 px-1 sm:px-2 border-t border-gray-200">
         <Button
           variant="outline"
           onClick={onClose}
-          className="px-4 py-2 text-sm cursor-pointer"
+          className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm cursor-pointer"
           disabled={isLoading}
         >
           Hủy
         </Button>
         <Button
           onClick={handleSubmit}
-          className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
+          className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
           disabled={isLoading}
         >
           {isLoading ? 'Đang thêm...' : 'Thêm mới'}

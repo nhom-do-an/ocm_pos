@@ -19,15 +19,15 @@ export const CartTable: React.FC = () => {
   const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full overflow-x-auto">
       <Table>
         <TableHeader>
           <TableRow className="border-gray-200">
-            <TableHead className="w-[50%]">Sản phẩm ({activeTab ? activeTab.cart.length : 0})</TableHead>
-            <TableHead className="text-center">Đơn giá</TableHead>
-            <TableHead className="text-center w-[120px]">Số lượng</TableHead>
-            <TableHead className="text-right">Thành tiền</TableHead>
-            <TableHead className="w-[40px]"></TableHead>
+            <TableHead className="w-[45%] sm:w-[50%] text-xs sm:text-sm">Sản phẩm ({activeTab ? activeTab.cart.length : 0})</TableHead>
+            <TableHead className="text-center text-xs sm:text-sm hidden md:table-cell">Đơn giá</TableHead>
+            <TableHead className="text-center w-[90px] sm:w-[120px] text-xs sm:text-sm">SL</TableHead>
+            <TableHead className="text-right text-xs sm:text-sm">Thành tiền</TableHead>
+            <TableHead className="w-[28px] sm:w-[40px]"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -44,9 +44,9 @@ export const CartTable: React.FC = () => {
                 style={{ animationDelay: `${index * 50}ms` }}
               >
                 {/* Product Info */}
-                <TableCell>
-                  <div className="flex items-start gap-3">
-                    <div className="w-12 h-12 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden shadow-sm">
+                <TableCell className="py-2 sm:py-3">
+                  <div className="flex items-start gap-2 sm:gap-3">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex-shrink-0 flex items-center justify-center overflow-hidden shadow-sm">
                       {item.product.image ? (
                         <img
                           src={item.product.image}
@@ -54,32 +54,36 @@ export const CartTable: React.FC = () => {
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <span className="text-xl">📦</span>
+                        <span className="text-base sm:text-xl">📦</span>
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h4 className="font-medium text-gray-900 text-sm">
+                      <div className="flex flex-wrap items-center gap-1 sm:gap-2 mb-0.5 sm:mb-1">
+                        <h4 className="font-medium text-gray-900 text-xs sm:text-sm line-clamp-2">
                           {item.product.name}
                         </h4>
                         {isOutOfStock && (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-red-100 text-red-800 border border-red-300">
+                          <span className="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-xs font-semibold bg-red-100 text-red-800 border border-red-300">
                             Hết hàng
                           </span>
                         )}
                       </div>
                       {item.product.title && (
-                        <p className="text-xs text-gray-600 mb-1">
+                        <p className="text-[10px] sm:text-xs text-gray-600 mb-0.5 sm:mb-1 truncate">
                           {item.product.title}
                         </p>
                       )}
-                      <p className="text-xs text-gray-500">
+                      <p className="text-[10px] sm:text-xs text-gray-500 hidden sm:block">
                         Đơn vị: {item.product.unit || '---'} • Tồn:{' '}
                         {item.product.stock || 0}
                       </p>
+                      {/* Mobile: show price here */}
+                      <p className="text-xs text-gray-700 font-medium md:hidden mt-0.5">
+                        {formatCurrency(item.product.price)}
+                      </p>
                       {/* Note */}
                       {item.note || editingNoteId === item.product.id ? (
-                        <div className="mt-1">
+                        <div className="mt-0.5 sm:mt-1">
                           {editingNoteId === item.product.id ? (
                             <input
                               type="text"
@@ -98,13 +102,13 @@ export const CartTable: React.FC = () => {
                                 }
                               }}
                               placeholder="Nhập ghi chú sản phẩm..."
-                              className="w-full px-2 py-1 text-xs border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                              className="w-full px-1.5 sm:px-2 py-0.5 sm:py-1 text-[10px] sm:text-xs border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                               autoFocus
                             />
                           ) : (
                             <div
                               onClick={() => setEditingNoteId(item.product.id)}
-                              className="text-xs text-blue-600 cursor-pointer hover:text-blue-700"
+                              className="text-[10px] sm:text-xs text-blue-600 cursor-pointer hover:text-blue-700 truncate"
                             >
                               Ghi chú: {item.note}
                             </div>
@@ -113,7 +117,7 @@ export const CartTable: React.FC = () => {
                       ) : (
                         <button
                           onClick={() => setEditingNoteId(item.product.id)}
-                          className="mt-1 text-xs text-gray-400 hover:text-blue-600 transition-colors"
+                          className="mt-0.5 sm:mt-1 text-[10px] sm:text-xs text-gray-400 hover:text-blue-600 transition-colors hidden sm:inline-block"
                         >
                           + Thêm ghi chú
                         </button>
@@ -122,23 +126,23 @@ export const CartTable: React.FC = () => {
                   </div>
                 </TableCell>
 
-                {/* Price */}
-                <TableCell className="text-left">
-                  <span className="text-sm font-medium text-gray-900">
+                {/* Price - Hidden on mobile */}
+                <TableCell className="text-left hidden md:table-cell">
+                  <span className="text-xs sm:text-sm font-medium text-gray-900">
                     {formatCurrency(item.product.price)}
                   </span>
                 </TableCell>
 
                 {/* Quantity Controls */}
-                <TableCell>
-                  <div className="flex items-center justify-center gap-1">
+                <TableCell className="py-2 sm:py-3">
+                  <div className="flex items-center justify-center gap-0.5 sm:gap-1">
                     <button
                       onClick={() =>
                         updateQuantity(item.product.id, item.quantity - 1)
                       }
-                      className="w-7 h-7 rounded-lg border border-gray-300 hover:bg-gray-100 hover:border-gray-400 flex items-center justify-center transition-all duration-150 active:scale-95"
+                      className="w-6 h-6 sm:w-7 sm:h-7 rounded-md sm:rounded-lg border border-gray-300 hover:bg-gray-100 hover:border-gray-400 flex items-center justify-center transition-all duration-150 active:scale-95"
                     >
-                      <Minus className="w-3 h-3" />
+                      <Minus className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                     </button>
                     <input
                       type="number"
@@ -147,35 +151,35 @@ export const CartTable: React.FC = () => {
                         const value = parseInt(e.target.value) || 1;
                         updateQuantity(item.product.id, value);
                       }}
-                      className="w-12 h-7 text-center border border-gray-300 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                      className="w-8 sm:w-12 h-6 sm:h-7 text-center border border-gray-300 rounded-md sm:rounded-lg text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                       min="1"
                     />
                     <button
                       onClick={() =>
                         updateQuantity(item.product.id, item.quantity + 1)
                       }
-                      className="w-7 h-7 rounded-lg border border-gray-300 hover:bg-gray-100 hover:border-gray-400 flex items-center justify-center transition-all duration-150 active:scale-95"
+                      className="w-6 h-6 sm:w-7 sm:h-7 rounded-md sm:rounded-lg border border-gray-300 hover:bg-gray-100 hover:border-gray-400 flex items-center justify-center transition-all duration-150 active:scale-95"
                     >
-                      <Plus className="w-3 h-3" />
+                      <Plus className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                     </button>
                   </div>
                 </TableCell>
 
                 {/* Total */}
-                <TableCell className="text-right">
-                  <span className="text-sm font-semibold text-blue-600">
+                <TableCell className="text-right py-2 sm:py-3">
+                  <span className="text-xs sm:text-sm font-semibold text-blue-600">
                     {formatCurrency(item.product.price * item.quantity)}
                   </span>
                 </TableCell>
 
                 {/* Delete Button */}
-                <TableCell>
+                <TableCell className="py-2 sm:py-3">
                   <button
                     onClick={() => removeFromCart(item.product.id)}
-                    className="text-gray-400 hover:text-red-600 hover:scale-110 transition-all duration-200 p-1 rounded hover:bg-red-50"
+                    className="text-gray-400 hover:text-red-600 hover:scale-110 transition-all duration-200 p-0.5 sm:p-1 rounded hover:bg-red-50"
                     title="Xóa"
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   </button>
                 </TableCell>
               </TableRow>
@@ -184,10 +188,10 @@ export const CartTable: React.FC = () => {
         </TableBody>
       </Table>
       {!activeTab || activeTab.cart.length === 0 && <div className="flex-1 flex items-center justify-center h-full animate-fade-in">
-        <div className="text-center py-12 px-4">
-          <div className="text-gray-300 mb-4">
+        <div className="text-center py-8 sm:py-12 px-4">
+          <div className="text-gray-300 mb-3 sm:mb-4">
             <svg
-              className="w-26 h-26 mx-auto opacity-50"
+              className="w-16 h-16 sm:w-20 sm:h-20 md:w-26 md:h-26 mx-auto opacity-50"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 26 26"
@@ -200,12 +204,12 @@ export const CartTable: React.FC = () => {
               />
             </svg>
           </div>
-          <p className="text-gray-500 text-[20px] font-medium mb-2">
+          <p className="text-gray-500 text-base sm:text-lg md:text-[20px] font-medium mb-1 sm:mb-2">
             Chưa có sản phẩm trong giỏ
           </p>
-          <p className="text-gray-400 text-[16px]">
+          <p className="text-gray-400 text-sm sm:text-base md:text-[16px]">
             Nhấn{' '}
-            <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded font-semibold">
+            <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-gray-100 text-gray-700 rounded font-semibold text-xs sm:text-sm">
               F3
             </span>{' '}
             để tìm kiếm sản phẩm
