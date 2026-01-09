@@ -275,7 +275,14 @@ export const usePOSStore = create<POSStore>((set, get) => ({
     persistTabs(updatedTabs, activeTabId);
   },
   updateQuantity: (productId, quantity) => {
-    const { orderTabs, activeTabId } = get();
+    const { orderTabs, activeTabId, removeFromCart } = get();
+
+    // If quantity is 0 or negative, remove the item from cart
+    if (quantity <= 0) {
+      removeFromCart(productId);
+      return;
+    }
+
     const updatedTabs = orderTabs.map((tab) =>
       tab.id === activeTabId
         ? {

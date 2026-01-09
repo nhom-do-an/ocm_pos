@@ -148,8 +148,12 @@ export const CartTable: React.FC = () => {
                       type="number"
                       value={item.quantity}
                       onChange={(e) => {
-                        const value = parseInt(e.target.value) || 1;
-                        updateQuantity(item.product.id, value);
+                        const value = parseInt(e.target.value);
+                        if (isNaN(value) || value < 1) {
+                          updateQuantity(item.product.id, 1);
+                        } else {
+                          updateQuantity(item.product.id, value);
+                        }
                       }}
                       className="w-8 sm:w-12 h-6 sm:h-7 text-center border border-gray-300 rounded-md sm:rounded-lg text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                       min="1"
